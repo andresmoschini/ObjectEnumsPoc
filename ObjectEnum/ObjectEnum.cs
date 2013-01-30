@@ -78,5 +78,20 @@ namespace ObjectEnum
 
             return result;
         }
+
+        public static explicit operator int(ObjectEnum<TEnum> x)
+        {
+            return x.Ordinal;
+        }
+
+        public static explicit operator ObjectEnum<TEnum>(int x)
+        {
+            TEnum enumInstance;
+            if (!byOrdinal.TryGetValue(x, out enumInstance))
+                throw new ArgumentException(
+                    string.Format("Enum value {0} not found", x, "x"));
+ 
+            return enumInstance;
+        }
     }
 }

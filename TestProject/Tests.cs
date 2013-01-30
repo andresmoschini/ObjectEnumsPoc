@@ -10,6 +10,23 @@ namespace TestProject
     [TestClass()]
     public class ClassicEnum_Tests
     {
+
+        [TestMethod()]
+        public void ClassicEnum_CastToIntTest()
+        {
+            var expected = 7;
+            var actual = (int)ProductType.Motherboard;
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void ClassicEnum_CastFromIntTest()
+        {
+            var expected = ProductType.Motherboard;
+            var actual = (ProductType)7;
+            Assert.AreEqual(expected, actual);
+        }
+
         [TestMethod()]
         public void ClassicEnum_GetAllValuesTest()
         {
@@ -149,6 +166,23 @@ namespace TestProject
     [TestClass()]
     public class ObjectEnum_Tests
     {
+
+        [TestMethod()]
+        public void ObjectEnum_CastToIntTest()
+        {
+            var expected = 7;
+            var actual = (int)ProductType.Motherboard;
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void ObjectEnum_CastFromIntTest()
+        {
+            var expected = ProductType.Motherboard;
+            var actual = (ProductType)7;
+            Assert.AreEqual(expected, actual);
+        }
+
         [TestMethod()]
         public void ObjectEnum_GetAllValuesTest()
         {

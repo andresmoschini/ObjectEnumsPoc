@@ -21,6 +21,23 @@ namespace TestProject
     [TestClass()]
     public class <#= ns #>_Tests
     {
+
+        [TestMethod()]
+        public void <#= ns #>_CastToIntTest()
+        {
+            var expected = 7;
+            var actual = (int)ProductType.Motherboard;
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void <#= ns #>_CastFromIntTest()
+        {
+            var expected = ProductType.Motherboard;
+            var actual = (ProductType)7;
+            Assert.AreEqual(expected, actual);
+        }
+
         [TestMethod()]
         public void <#= ns #>_GetAllValuesTest()
         {
