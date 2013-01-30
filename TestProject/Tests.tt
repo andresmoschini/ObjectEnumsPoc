@@ -1,0 +1,155 @@
+<#@ template language="C#" hostspecific="True" debug="True" #>
+<#@ output extension=".cs" #>
+<#@ include file="T4Toolbox.tt" #>
+<#
+
+var namespacesToTest = new[] { "ClassicEnum", "ObjectEnum" };
+
+#>
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+
+<#
+foreach (var ns in namespacesToTest) {
+#>
+namespace TestProject
+{
+	using ProductType = global::<#= ns #>.ProductType;
+	using Util = global::<#= ns #>.Util;
+
+    [TestClass()]
+    public class <#= ns #>_Tests
+    {
+        [TestMethod()]
+        public void <#= ns #>_GetAllValuesTest()
+        {
+            var target = new Util();
+            ISet<ProductType> expected = new HashSet<ProductType>()
+            {
+                ProductType.All,
+                ProductType.Processor,
+                ProductType.GraphicCard,
+                ProductType.Notebook,
+                ProductType.Desktop,
+                ProductType.Motherboard
+            };
+            ISet<ProductType> actual;
+            actual = target.GetAllValues();
+            Assert.IsTrue(expected.SetEquals(actual));
+        }
+
+        [TestMethod()]
+        public void <#= ns #>_EqualsTest()
+        {
+            var processor1 = ProductType.Processor;
+            var processor2 = ProductType.Processor;
+
+            Assert.IsTrue(processor1 == processor2);
+        }
+
+        [TestMethod()]
+        public void <#= ns #>_IsNotEqualTest()
+        {
+            var processor = ProductType.Processor;
+            var motherboard = ProductType.Motherboard;
+
+            Assert.IsFalse(processor == motherboard);
+        }
+
+        [TestMethod()]
+        //Only works with Classic
+        public void <#= ns #>_DefaultIsAllTest()
+        {
+            ProductType defaultValue = default(ProductType);
+            Assert.AreEqual(ProductType.All, defaultValue);
+        }
+
+        [TestMethod()]
+        //Only works with ObjectEnum
+        public void <#= ns #>_DefaultEqualsNullTest()
+        {
+            ProductType defaultValue = default(ProductType);
+            Assert.IsTrue(defaultValue == null);
+        }
+
+        [TestMethod()]
+        public void <#= ns #>_ValidParseTest()
+        {
+            var target = new Util();
+            var expected = ProductType.GraphicCard;
+            
+			var actual = target.Parse("GraphicCard");
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void <#= ns #>_ValidParseNameSpacesTest()
+        {
+            var target = new Util();
+            var expected = ProductType.GraphicCard;
+            
+			var actual = target.Parse("   GraphicCard   ");
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void <#= ns #>_InvalidParseCaseInsensitiveTest()
+        {
+            var target = new Util();
+            var expected = ProductType.GraphicCard;
+            
+			var actual = target.Parse("graphiccard");
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void <#= ns #>_ValidParseCaseInsensitiveTest()
+        {
+            var target = new Util();
+            var expected = ProductType.GraphicCard;
+            
+            var actual = target.Parse("graphiccard", true);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void <#= ns #>_InvalidParseNullTest()
+        {
+            var target = new Util();
+            
+            var actual = target.Parse(null);
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void <#= ns #>_InvalidParseEmptyTest()
+        {
+            var target = new Util();
+            
+			var actual = target.Parse("");
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void <#= ns #>_InvalidParseSpacesTest()
+        {
+            var target = new Util();
+            
+			var actual = target.Parse("    ");
+        }
+
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void <#= ns #>_InvalidParseNameUnexistingNameTest()
+        {
+            var target = new Util();
+            
+			var actual = target.Parse("UnexistingName");
+        }
+    }
+}
+<# } #>
